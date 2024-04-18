@@ -3,8 +3,9 @@
 contains a floor function
 """
 
-def floor(n: float)->int:
+
+def floor(n: float) -> int:
     """method to take float and returns its
-	   floor value 
+    floor value
     """
     return int(n)
