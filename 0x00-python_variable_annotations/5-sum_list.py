@@ -3,8 +3,8 @@
 contains a sum_list function
 """
 
-
-def sum_list(input_list: list[float]) -> float:
+from typing import List
+def sum_list(input_list: List[float]) -> float:
     """
     function to take a list of floats and return the
     sum of the floats
