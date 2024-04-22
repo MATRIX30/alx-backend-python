@@ -21,7 +21,8 @@ def measure_time(n: int, max_delay: int) -> float:
                 float: the average time for a taks to execute
     """
     start_time: float = time.time()
-    wait_n(n, max_delay)
+    # enables you to run code in asynch fashion
+    asyncio.run(wait_n(n, max_delay))
     stop_time: float = time.time()
 
     total_time: float = stop_time - start_time
