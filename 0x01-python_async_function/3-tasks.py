@@ -4,13 +4,12 @@ contain task_wait_random function
 """
 
 
-from typing import Any
 import asyncio
 
 wait_random = __import__("0-basic_async_syntax").wait_random
 
 
-def task_wait_random(max_delay: int) -> Any:
+def task_wait_random(max_delay: int) -> asyncio.Task:
     """
     function that takes int max_delay and returns
     asyncio Task
