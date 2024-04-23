@@ -6,10 +6,10 @@ contains async_generator function
 
 import random
 import asyncio
-from typing import Iterator
+from typing import Generator
 
 
-async def async_generator() -> Iterator[float]:
+async def async_generator() -> Generator[float, None, None]:
     """
     coroutine to that returns a random number betwee 1-10
     """
