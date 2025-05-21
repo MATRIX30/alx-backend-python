@@ -2,6 +2,7 @@
 import sqlite3
 import logging
 import functools
+from datetime import datetime
 #### decorator to lof SQL queries
 
 ## configuring the logging library
@@ -27,6 +28,7 @@ def log_queries(func) -> None:
         else:
             pass
         logging.info(query)
+        print(f"{datetime.now().strftime("%Y-%m-%d %H:%M")} -> {query}")
         func(*args, **kwargs)
     return wrapper
 @log_queries
