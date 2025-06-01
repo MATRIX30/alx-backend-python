@@ -1,10 +1,12 @@
-from rest_framework.routers import DefaultRouter
+from rest_framework import routers 
 from rest_framework_nested.routers import NestedDefaultRouter
 from .views import ConversationViewSet, MessageViewSet, UserViewSet
 from rest_framework import status, filters
 from django.urls import path, include
 
-router = DefaultRouter()
+status = status
+filter = filter
+router = routers.DefaultRouter()
 router.register(r'conversations', ConversationViewSet, basename='conversation')
 router.register(r'messages', MessageViewSet, basename='message')
 router.register(r'users', UserViewSet, basename='user')
