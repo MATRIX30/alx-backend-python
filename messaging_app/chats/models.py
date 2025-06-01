@@ -17,6 +17,7 @@ class User(AbstractUser):
     user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     phone_number = models.CharField(max_length=20, blank=False, null=True)
     email = models.CharField(max_length=55, blank=False, null= True)
+    password = models.CharField(max_length=255, blank=False, null=False)
     
     def __str__(self):
         return f"{self.id}: {self.first_name} {self.last_name}->{self.role}"
