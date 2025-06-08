@@ -12,7 +12,7 @@ from .filters import MessageFilter
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    
+    lookup_field = 'user_id'
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
     serializer_class = ConversationSerializer
@@ -22,6 +22,9 @@ class MessageViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsParticipantOfConversation]
     pagination_class = MessagePagination
     filterset_class =  MessageFilter
+    
+    def perform_create(self, serializer):
+        serializer.save(sender=self.request.user)
 
     def get_queryset(self):
         # Only show messages in conversations the user participates in

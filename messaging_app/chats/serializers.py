@@ -8,7 +8,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['user_id', 'username', 'email', 'first_name', 'last_name', 'phone_number', 'role']
 
     def get_full_name(self, obj):
         return f"{obj.first_name} {obj.last_name}"
@@ -22,14 +22,16 @@ class MessageSerializer(serializers.ModelSerializer):
     sender = serializers.CharField(source='sender.username', read_only=True)
     class Meta:
         model = Message
-        fields = '__all__'
+        fields = ['message_id', 'conversation', 'sender', 'message_body']
 
 class ConversationSerializer(serializers.ModelSerializer):
-    messages = MessageSerializer(many=True, read_only=True)
-    participants = UserSerializer(many=True, read_only=True)
+    participants = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=User.objects.all()
+    )
+
     class Meta:
         model = Conversation
-        fields = '__all__'
+        fields = ['conversation_id', 'participants', 'messages', 'created_at', 'updated_at']
     
     def validate(self, data):
         """

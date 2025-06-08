@@ -19,6 +19,9 @@ class User(AbstractUser):
     email = models.CharField(max_length=55, blank=False, null= True)
     password = models.CharField(max_length=255, blank=False, null=False)
     
+    @property
+    def id(self):
+        return self.user_id
     def __str__(self):
         return f"{self.user_id}: {self.first_name} {self.last_name}->{self.role}"
 class Conversation(models.Model):

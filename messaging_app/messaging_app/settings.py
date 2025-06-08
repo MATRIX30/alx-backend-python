@@ -154,3 +154,8 @@ REST_FRAMEWORK = {
     'PAGE_NUMBER_PAGINATION': 'rest_framework.pagination.PageNumberPagination',
     
 }
+
+SIMPLE_JWT = {
+    "USER_ID_FIELD": "user_id",
+    "USER_ID_CLAIM": "user_id",
+}
