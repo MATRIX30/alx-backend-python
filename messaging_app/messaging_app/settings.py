@@ -129,16 +129,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ## Adding django-rest framework to settings
 # 'rest_framework.permissions.IsAuthenticated',
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'chats.permissions.IsParticipantOfConversation',
     ],
     
-    'DEFAULT_PAGINATION_CLASS' : [
-        'chats.pagination.MessagePagination',
-        'PAGE_SIZE' : 20,
-        
-    ],
+    'DEFAULT_PAGINATION_CLASS': 'chats.pagination.MessagePagination',  # Use your custom paginator
+    'PAGE_SIZE': 20,
     
     'DEFAULT_FILTER_BACKENDS' : [
         'django_filters.rest_framework.DjangoFilterBackend',
