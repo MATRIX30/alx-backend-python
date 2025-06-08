@@ -28,8 +28,13 @@ class IsParticipantOfConversation(permissions.BasePermission):
         # For Conversation: user must be a participant
         if hasattr(obj, 'participants'):
             return request.user in obj.participants.all()
+
         # For Message: user must be sender or a participant in the conversation
         if hasattr(obj, 'sender') and hasattr(obj, 'conversation'):
+            if request.method in ['PUT', 'PATCH', 'DELETE']:
+                # Only sender can update or delete their message
+                return obj.sender == request.user
+            # Any participant can view or create
             return (
                 obj.sender == request.user or
                 request.user in obj.conversation.participants.all()
