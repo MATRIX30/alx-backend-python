@@ -12,3 +12,26 @@ class IsOwnerOrParticipant(permissions.BasePermission):
         if hasattr(obj, 'sender'):
             return obj.sender == request.user or request.user in obj.conversation.participants.all()
         return False
+
+
+class IsParticipantOfConversation(permissions.BasePermission):
+    """
+    Allow only authenticated users who are participants in a conversation
+    to send, view, update, and delete messages.
+    """
+
+    def has_permission(self, request, view):
+        # Only allow authenticated users
+        return request.user and request.user.is_authenticated
+
+    def has_object_permission(self, request, view, obj):
+        # For Conversation: user must be a participant
+        if hasattr(obj, 'participants'):
+            return request.user in obj.participants.all()
+        # For Message: user must be sender or a participant in the conversation
+        if hasattr(obj, 'sender') and hasattr(obj, 'conversation'):
+            return (
+                obj.sender == request.user or
+                request.user in obj.conversation.participants.all()
+            )
+        return False
