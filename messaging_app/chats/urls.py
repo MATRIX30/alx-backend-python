@@ -21,5 +21,4 @@ urlpatterns = [
     path('', include(convo_router.urls)),
 ]
 
-#urlpatterns = router.urls
 
