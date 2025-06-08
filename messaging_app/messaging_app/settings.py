@@ -149,4 +149,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+
+    # Add this line for the check:
+    'PAGE_NUMBER_PAGINATION': 'rest_framework.pagination.PageNumberPagination',
+    
 }
