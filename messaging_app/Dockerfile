@@ -3,8 +3,8 @@ FROM python:3.10
 WORKDIR /app
 
 # copy requirments.txt
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY Requirements.txt .
+RUN pip install --no-cache-dir -r Requirements.txt
 
 # Copy the rest of your app code
 COPY . .
