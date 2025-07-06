@@ -1,0 +1,111 @@
+pipeline {
+    agent any
+    
+    environment {
+        PYTHONPATH = "${WORKSPACE}"
+        DJANGO_SETTINGS_MODULE = 'messaging_app.settings'
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Pulling code from GitHub...'
+                git branch: 'main', url: 'https://github.com/your-username/messaging_app.git'
+            }
+        }
+        
+        stage('Setup Python Environment') {
+            steps {
+                echo 'Setting up Python virtual environment...'
+                sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install --upgrade pip
+                '''
+            }
+        }
+        
+        stage('Install Dependencies') {
+            steps {
+                echo 'Installing dependencies...'
+                sh '''
+                    . venv/bin/activate
+                    pip install -r requirements.txt
+                    pip install pytest pytest-django pytest-cov
+                '''
+            }
+        }
+        
+        stage('Database Migration') {
+            steps {
+                echo 'Running database migrations...'
+                sh '''
+                    . venv/bin/activate
+                    python manage.py migrate
+                '''
+            }
+        }
+        
+        stage('Run Tests') {
+            steps {
+                echo 'Running tests with pytest...'
+                sh '''
+                    . venv/bin/activate
+                    pytest --cov=chats --cov-report=xml --cov-report=html --junitxml=test-results.xml -v
+                '''
+            }
+        }
+        
+        stage('Code Quality Check') {
+            steps {
+                echo 'Running code quality checks...'
+                sh '''
+                    . venv/bin/activate
+                    pip install flake8
+                    flake8 chats/ --max-line-length=88 --output-file=flake8-report.txt || true
+                '''
+            }
+        }
+    }
+    
+    post {
+        always {
+            echo 'Publishing test results and reports...'
+            
+            // Publish test results
+            junit 'test-results.xml'
+            
+            // Publish coverage report
+            publishHTML([
+                allowMissing: false,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'htmlcov',
+                reportFiles: 'index.html',
+                reportName: 'Coverage Report'
+            ])
+            
+            // Archive artifacts
+            archiveArtifacts artifacts: 'test-results.xml,coverage.xml,flake8-report.txt', fingerprint: true
+            
+            // Clean workspace
+            cleanWs()
+        }
+        
+        success {
+            echo 'Pipeline completed successfully!'
+            // Optional: Send notification
+            // emailext subject: 'Build Success: ${JOB_NAME} - ${BUILD_NUMBER}',
+            //          body: 'The build was successful!',
+            //          to: 'your-email@example.com'
+        }
+        
+        failure {
+            echo 'Pipeline failed!'
+            // Optional: Send notification
+            // emailext subject: 'Build Failed: ${JOB_NAME} - ${BUILD_NUMBER}',
+            //          body: 'The build failed. Please check the logs.',
+            //          to: 'your-email@example.com'
+        }
+    }
+}
